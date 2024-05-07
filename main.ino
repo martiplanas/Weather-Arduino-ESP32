@@ -26,7 +26,7 @@ String units = "metric";
 String language = "en"; 
 
 OW_Weather ow;
-int temp = 0; 
+int temp = 99; 
 
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
 int num1[] = {14, 13, 12, 21, 29, 37, 45, 53, 54};
@@ -46,26 +46,37 @@ void setup() {
   pixels.begin(); // This initializes the NeoPixel library.
   ConnectWifi();
   pixels.show();
+  Serial.print(getWeather());
+
   temp = round(getWeather());
+  Serial.print("temp1:");
+  Serial.print(temp);
+
+  temp = round(temp);
+  Serial.print("temp2:");
+  Serial.print(temp);
 }
 
 void loop() {  
 
   ClearDisplay();
-  Serial.print(temp);
-  DisplayNumber(13, 20);
-  delay(5 * 60 * 1000);
+  if(temp == 99){
+    DisplayNoData();
+  }else{
+    DisplayNumber(temp, 20);
+  }
+  
+  delay(10000);
   pixels.show(); // Mostrar els canvis als LEDs
 }
 
-int getWeather()
+float getWeather()
 {
   OW_forecast  *forecast = new OW_forecast;
 
   Serial.print("\nRequesting weather information from OpenWeather... ");
 
   ow.getForecast(forecast, api_key, latitude, longitude, units, language);
-  Serial.print( round(forecast->temp[0]));
   return forecast->temp[0];
   delete forecast;
 }
@@ -83,8 +94,8 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
     d1 = num / 10; 
     d2 = num % 10; 
 
-    Serial.print(d1);
-    Serial.print(d2);
+    //Serial.print(d1);
+    //Serial.print(d2);
   }
 
 
@@ -100,7 +111,7 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
       n = d2;
       m = -4;
     }
-    Serial.print(n);
+    //Serial.print(n);
     //Draw numbers
     if (n == 0){
       for (int i = 0; i < sizeof(num0) / sizeof(num0[0]); i++) {
@@ -180,4 +191,14 @@ void ConnectWifi(){
     Serial.print(".");
   }
   Serial.println("WiFi connected.");
+}
+
+void DisplayNoData(){ //Display no-data indicator
+  pixels.setPixelColor(25, 25, 25, 25);
+  pixels.setPixelColor(26, 25, 25, 25);
+  pixels.setPixelColor(27, 25, 25, 25);
+
+  pixels.setPixelColor(29, 25, 25, 25);
+  pixels.setPixelColor(30, 25, 25, 25);
+  pixels.setPixelColor(31, 25, 25, 25);
 }
