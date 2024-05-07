@@ -27,6 +27,7 @@ String language = "en";
 
 OW_Weather ow;
 int temp = 0; 
+int hum
 
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
 int num1[] = {14, 13, 12, 21, 29, 37, 45, 53, 54};
@@ -184,6 +185,16 @@ void ConnectWifi(){
     Serial.print(".");
   }
   Serial.println("WiFi connected.");
+}
+
+void GenerateColor(){
+  int initialrvalue = 
+  int initialrvalue = 
+  int initialrvalue = 
+
+  int finalrvalue = 
+  int finalrvalue = 
+  int finalrvalue = 
 }
 
 void DisplayNoData(){ //Display no-data indicator
