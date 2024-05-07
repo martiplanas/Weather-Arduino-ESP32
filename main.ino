@@ -26,7 +26,7 @@ String units = "metric";
 String language = "en"; 
 
 OW_Weather ow;
-int temp = 99; 
+int temp = 0; 
 
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
 int num1[] = {14, 13, 12, 21, 29, 37, 45, 53, 54};
@@ -45,29 +45,22 @@ void setup() {
   Serial.begin(115200);
   pixels.begin(); // This initializes the NeoPixel library.
   ConnectWifi();
+  DisplayNoData();
   pixels.show();
-  Serial.print(getWeather());
-
-  temp = round(getWeather());
-  Serial.print("temp1:");
-  Serial.print(temp);
-
-  temp = round(temp);
-  Serial.print("temp2:");
-  Serial.print(temp);
 }
 
-void loop() {  
-
-  ClearDisplay();
-  if(temp == 99){
+void loop() {
+  while (temp == 0){
+    temp = round(getWeather());
+    temp = round(temp);
     DisplayNoData();
-  }else{
-    DisplayNumber(temp, 20);
+    delay(5000);
   }
-  
-  delay(10000);
-  pixels.show(); // Mostrar els canvis als LEDs
+  ClearDisplay();
+  DisplayNumber(temp, 25);
+
+  pixels.show();
+  delay(5 * 60 * 1000);
 }
 
 float getWeather()
@@ -194,6 +187,9 @@ void ConnectWifi(){
 }
 
 void DisplayNoData(){ //Display no-data indicator
+  for(int i = 0; i < 63; i++){ 
+    pixels.setPixelColor(i, 0, 0, 0);
+  }
   pixels.setPixelColor(25, 25, 25, 25);
   pixels.setPixelColor(26, 25, 25, 25);
   pixels.setPixelColor(27, 25, 25, 25);
