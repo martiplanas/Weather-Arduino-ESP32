@@ -29,6 +29,7 @@ OW_Weather ow;
 int temp = 0; 
 int hum
 
+// Pixel art numbers
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
 int num1[] = {14, 13, 12, 21, 29, 37, 45, 53, 54};
 int num2[] = {12, 13, 14, 22, 30, 29, 28, 36, 44, 52, 53, 54};
@@ -39,6 +40,30 @@ int num6[] = {12, 13, 14, 20, 28, 29, 30, 38, 46, 54, 53, 52, 22};
 int num7[] = {12, 20, 29, 28, 36, 44, 52, 53, 54};
 int num8[] = {12, 20, 29, 28, 36, 44, 52, 53, 54, 13, 14, 22, 30, 38, 46};
 int num9[] = {12, 20, 28, 29, 30, 38, 36, 46, 44, 52, 53, 54};
+
+//Pixel art weather condition
+//Sun
+int sunPos[] = {0,7,9,14,20,19,29,28,27,26,37,36,35,34,44,43,54,49,63,56}
+int sunR[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25}
+int sunG[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25}
+int sunB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+//Cloud
+int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 43, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40}
+int cloudR[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
+int cloudG[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
+int cloudB[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
+
+//Rain Aditive
+int rainADDPos[] = {0, 2, 4, 6, 17, 19, 21, 23}
+int rainADDR[] = {0, 0, 0, 0, 0, 0, 0, 0}
+int rainADDG[] = {0, 0, 0, 0, 0, 0, 0, 0}
+int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25}
+
+//thunder Aditive
+int rainADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4}
+int rainADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
+int rainADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
+int rainADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0}
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -171,12 +196,6 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
 
 }
 
-void ClearDisplay(){
-  for(int i = 0; i < 63; i++){ 
-    pixels.setPixelColor(i, 0, 0, 0);
-  }
-}
-
 void ConnectWifi(){
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
@@ -187,14 +206,10 @@ void ConnectWifi(){
   Serial.println("WiFi connected.");
 }
 
-void GenerateColor(){
-  int initialrvalue = 
-  int initialrvalue = 
-  int initialrvalue = 
-
-  int finalrvalue = 
-  int finalrvalue = 
-  int finalrvalue = 
+void ClearDisplay(){
+  for(int i = 0; i < 63; i++){ 
+    pixels.setPixelColor(i, 0, 0, 0);
+  }
 }
 
 void DisplayNoData(){ //Display no-data indicator
