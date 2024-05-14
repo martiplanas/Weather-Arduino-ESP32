@@ -105,8 +105,6 @@ void loop() {
     previousWeatherUpdateTime = currentMilis;
     temp = round(getWeather());
     temp = round(temp);
-    ClearDisplay();
-    DisplayNumber(temp, 25);
   }
 
   wifiStatusPixel();
@@ -121,13 +119,14 @@ void loop() {
 }
 
 void displayScreen(int screen) {
-
+  ClearDisplay();
   // Display the content based on the current screen
   switch (screen) {
     case 0:
       // Display temperature
       pixels.setPixelColor(7, 0, 25, 25);
       pixels.setPixelColor(6, 0, 25, 25);
+      DisplayNumber(temp, 25);
       break;
     case 1:
       // Display humidity
@@ -160,9 +159,9 @@ float getWeather(){
 }
 
 void wifiStatusPixel(){
-  if(wifiStatus){
+  if (WiFi.status() == WL_CONNECTED) {
     pixels.setPixelColor(56, 0,20,0);
-  }else{
+  } else {
     pixels.setPixelColor(56, 20,0,0);
   }
   pixels.show();
@@ -268,14 +267,11 @@ void ConnectWifi(){
   pixels.show();
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
-  wifiStatus = false;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    wifiStatus = false;
     Serial.print(".");
   }
   Serial.println("WiFi connected.");
-  wifiStatus = true;
 }
 
 void ClearDisplay(){
