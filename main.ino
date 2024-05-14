@@ -27,7 +27,15 @@ String language = "en";
 OW_Weather ow;
 
 //----TIMING VARIABLES-----
+const unsigned long screenInterval = 5000; //5s between pages
+unsigned long previousScreenTime = 0;
 
+const unsigned long weatherUpdateInterval = 300000; //5min between update weather
+unsigned long previousWeatherUpdateTime = 0;
+
+//----SCREEN PAGE STATE----
+int currentScreen = 0;
+int totalScreens = 4;
 
 //----LOCAL WEATHER VAR----
 int temp = 0; 
@@ -48,37 +56,37 @@ int num9[] = {12, 20, 28, 29, 30, 38, 36, 46, 44, 52, 53, 54};
 
 //----PIXEL ART CONDITIONS----
 //SUN
-int sunPos[] = {0,7,9,14,20,19,29,28,27,26,37,36,35,34,44,43,54,49,63,56}
-int sunR[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25}
-int sunG[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25}
-int sunB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+int sunPos[] = {0,7,9,14,20,19,29,28,27,26,37,36,35,34,44,43,54,49,63,56};
+int sunR[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
+int sunG[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
+int sunB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 //CLOUD
-int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 43, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40}
-int cloudR[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
-int cloudG[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
-int cloudB[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
+int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 43, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40};
+int cloudR[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
+int cloudG[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
+int cloudB[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
 
 //Rain Aditive
-int rainADDPos[] = {0, 2, 4, 6, 17, 19, 21, 23}
-int rainADDR[] = {0, 0, 0, 0, 0, 0, 0, 0}
-int rainADDG[] = {0, 0, 0, 0, 0, 0, 0, 0}
-int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25}
+int rainADDPos[] = {0, 2, 4, 6, 17, 19, 21, 23};
+int rainADDR[] = {0, 0, 0, 0, 0, 0, 0, 0};
+int rainADDG[] = {0, 0, 0, 0, 0, 0, 0, 0};
+int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25};
 
 //thunder Aditive
-int thunderADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4}
-int thunderADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
-int thunderADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
-int thunderADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0}
+int thunderADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4};
+int thunderADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
+int thunderADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
+int thunderADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0};
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {  
   Serial.begin(115200); //Initialize serial
   pixels.begin(); // Initialize Pixels
-  ConnectWifi();
-  DisplayNoData();
+  DisplayNoData(); //Display no data (- -)
   pixels.show();
+  ConnectWifi(); //Wifi conection
 }
 
 void loop() {
@@ -203,13 +211,21 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
 }
 
 void ConnectWifi(){
+  pixels.setPixelColor(57, 20,0,0);
+  pixels.show();
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
   while (WiFi.status() != WL_CONNECTED) {
+    pixels.setPixelColor(57, 20,0,0);
+    pixels.show();
     delay(500);
+    pixels.setPixelColor(57, 0,0,0);
+    pixels.show();
     Serial.print(".");
   }
   Serial.println("WiFi connected.");
+  pixels.setPixelColor(57, 0,20,0);
+  pixels.show();
 }
 
 void ClearDisplay(){
