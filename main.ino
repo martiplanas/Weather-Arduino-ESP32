@@ -17,6 +17,7 @@
 //----------WIFI----------
 const char* ssid = "test";
 const char* password = "arduinop";
+bool wifiStatus = false;
 
 //-------OPEN WEATHER-----
 String api_key = "9a77e9742b30c25a5d4745718be35c17"; 
@@ -90,30 +91,82 @@ void setup() {
 }
 
 void loop() {
+  unsigned long currentMilis = millis();
+
+  //SCREEN ROTATION
+  if(currentMilis - previousScreenTime >= screenInterval){
+    previousScreenTime = currentMilis;
+    currentScreen = (currentScreen+1) % totalScreens;
+    displayScreen(currentScreen);
+  }
+
+  //WEATHER UPDATE
+  if (currentMilis - previousWeatherUpdateTime >= weatherUpdateInterval){
+    previousWeatherUpdateTime = currentMilis;
+    temp = round(getWeather());
+    temp = round(temp);
+    ClearDisplay();
+    DisplayNumber(temp, 25);
+  }
+
+  wifiStatusPixel();
   while (temp == 0){
     temp = round(getWeather());
     temp = round(temp);
     DisplayNoData();
     delay(5000);
   }
-  ClearDisplay();
-  DisplayNumber(temp, 25);
-
+ 
   pixels.show();
-  delay(5 * 60 * 1000);
 }
 
-float getWeather()
-{
+void displayScreen(int screen) {
+
+  // Display the content based on the current screen
+  switch (screen) {
+    case 0:
+      // Display temperature
+      pixels.setPixelColor(7, 0, 25, 25);
+      pixels.setPixelColor(6, 0, 25, 25);
+      break;
+    case 1:
+      // Display humidity
+      pixels.setPixelColor(5, 25, 25, 0);
+      pixels.setPixelColor(4, 25, 25, 0);
+      break;
+    case 2:
+      // Display weather condition
+      pixels.setPixelColor(3, 25, 0, 25);
+      pixels.setPixelColor(2, 25, 0, 25);
+      break;
+    case 3:
+      // Display other data
+      pixels.setPixelColor(1, 25, 0, 0);
+      pixels.setPixelColor(0, 25, 0, 0);
+      break;
+  }
+}
+
+float getWeather(){
+  pixels.setPixelColor(57, 25, 25, 0);
   OW_forecast  *forecast = new OW_forecast;
 
   Serial.print("\nRequesting weather information from OpenWeather... ");
 
   ow.getForecast(forecast, api_key, latitude, longitude, units, language);
+  pixels.setPixelColor(57, 0, 0, 0);
   return forecast->temp[0];
   delete forecast;
 }
 
+void wifiStatusPixel(){
+  if(wifiStatus){
+    pixels.setPixelColor(56, 0,20,0);
+  }else{
+    pixels.setPixelColor(56, 20,0,0);
+  }
+  pixels.show();
+}
 
 void DisplayNumber(int num, int intensity){//ONLY 0 to 99
   int d1;
@@ -211,21 +264,18 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
 }
 
 void ConnectWifi(){
-  pixels.setPixelColor(57, 20,0,0);
+  pixels.setPixelColor(56, 20,0,0);
   pixels.show();
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
+  wifiStatus = false;
   while (WiFi.status() != WL_CONNECTED) {
-    pixels.setPixelColor(57, 20,0,0);
-    pixels.show();
     delay(500);
-    pixels.setPixelColor(57, 0,0,0);
-    pixels.show();
+    wifiStatus = false;
     Serial.print(".");
   }
   Serial.println("WiFi connected.");
-  pixels.setPixelColor(57, 0,20,0);
-  pixels.show();
+  wifiStatus = true;
 }
 
 void ClearDisplay(){
