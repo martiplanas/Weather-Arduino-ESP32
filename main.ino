@@ -11,25 +11,30 @@
 
 // Definim el pin de l'Arduino que utilitzarem per controlar el led o la matriu de leds
 #define PIN            25
-// Nยบ de leds connectats
+// Numero de leds connectats
 #define NUMPIXELS      64
 
+//----------WIFI----------
 const char* ssid = "test";
 const char* password = "arduinop";
 
+//-------OPEN WEATHER-----
 String api_key = "9a77e9742b30c25a5d4745718be35c17"; 
-
 String latitude =  "42.9831"; 
 String longitude = "2.8249";
-
 String units = "metric"; 
 String language = "en"; 
-
 OW_Weather ow;
-int temp = 0; 
-int hum
 
-// Pixel art numbers
+//----TIMING VARIABLES-----
+
+
+//----LOCAL WEATHER VAR----
+int temp = 0; 
+int hum = 0;
+//String condition = 0;
+
+//----0-9 PIXEL ART NUMS----
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
 int num1[] = {14, 13, 12, 21, 29, 37, 45, 53, 54};
 int num2[] = {12, 13, 14, 22, 30, 29, 28, 36, 44, 52, 53, 54};
@@ -41,13 +46,14 @@ int num7[] = {12, 20, 29, 28, 36, 44, 52, 53, 54};
 int num8[] = {12, 20, 29, 28, 36, 44, 52, 53, 54, 13, 14, 22, 30, 38, 46};
 int num9[] = {12, 20, 28, 29, 30, 38, 36, 46, 44, 52, 53, 54};
 
-//Pixel art weather condition
-//Sun
+//----PIXEL ART CONDITIONS----
+//SUN
 int sunPos[] = {0,7,9,14,20,19,29,28,27,26,37,36,35,34,44,43,54,49,63,56}
 int sunR[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25}
 int sunG[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25}
 int sunB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-//Cloud
+
+//CLOUD
 int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 43, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40}
 int cloudR[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
 int cloudG[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25}
@@ -60,16 +66,16 @@ int rainADDG[] = {0, 0, 0, 0, 0, 0, 0, 0}
 int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25}
 
 //thunder Aditive
-int rainADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4}
-int rainADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
-int rainADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
-int rainADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0}
+int thunderADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4}
+int thunderADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
+int thunderADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25}
+int thunderADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0}
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {  
-  Serial.begin(115200);
-  pixels.begin(); // This initializes the NeoPixel library.
+  Serial.begin(115200); //Initialize serial
+  pixels.begin(); // Initialize Pixels
   ConnectWifi();
   DisplayNoData();
   pixels.show();
