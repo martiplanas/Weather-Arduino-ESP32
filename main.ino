@@ -41,7 +41,7 @@ int totalScreens = 4;
 //----LOCAL WEATHER VAR----
 int temp = 999; 
 int hum = 999;
-char condition = "na";
+char condition = 0;
 
 //----0-9 PIXEL ART NUMS----
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
@@ -119,14 +119,14 @@ void loop() {
 }
 
 void DisplayCondition(){
-  if(condition == "na"){
-    DisplayNoData()
+  if(condition == 0){
+    DisplayNoData();
   }
 }
 
 void DisplayHumidity(){
-  if(hum == "999"){
-    DisplayNoData()
+  if(hum == 999){
+    DisplayNoData();
   }
 }
 
