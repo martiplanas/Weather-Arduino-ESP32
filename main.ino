@@ -39,8 +39,8 @@ int currentScreen = 0;
 int totalScreens = 4;
 
 //----LOCAL WEATHER VAR----
-int temp = 999; 
-int hum = 999;
+int temp = 0; 
+int hum = 0;
 char condition = 0;
 
 //----0-9 PIXEL ART NUMS----
@@ -125,7 +125,7 @@ void DisplayCondition(){
 }
 
 void DisplayHumidity(){
-  if(hum == 999){
+  if(hum == 0){
     DisplayNoData();
   }
 }
@@ -136,21 +136,21 @@ void displayScreen(int screen) {
   switch (screen) {
     case 0:
       // Display Conditions
+      DisplayCondition();
       pixels.setPixelColor(7, 0, 25, 25);
       pixels.setPixelColor(6, 0, 25, 25);
-      DisplayCondition();
       break;
     case 1:
       // Display temperature
+      DisplayNumber(temp, 25);
       pixels.setPixelColor(5, 25, 25, 0);
       pixels.setPixelColor(4, 25, 25, 0);
-      DisplayNumber(temp, 25);
       break;
     case 2:
       // Display humidity
+      DisplayHumidity();
       pixels.setPixelColor(3, 25, 0, 25);
       pixels.setPixelColor(2, 25, 0, 25);
-      DisplayHumidity();
       break;
     case 3:
       // Display other data
@@ -161,7 +161,7 @@ void displayScreen(int screen) {
   }
 }
 
-float getWeather(){
+float getWeather(int dataType){
   pixels.setPixelColor(57, 25, 25, 0);
   OW_forecast  *forecast = new OW_forecast;
 
@@ -169,7 +169,13 @@ float getWeather(){
 
   ow.getForecast(forecast, api_key, latitude, longitude, units, language);
   pixels.setPixelColor(57, 0, 0, 0);
-  return forecast->temp[0];
+
+  if (dataType == 0){
+
+  }if (dataType == 1){
+    return forecast->temp[0];
+  }
+  
   delete forecast;
 }
 
