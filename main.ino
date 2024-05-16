@@ -39,9 +39,9 @@ int currentScreen = 0;
 int totalScreens = 4;
 
 //----LOCAL WEATHER VAR----
-int temp = 0; 
-int hum = 0;
-//String condition = 0;
+int temp = 999; 
+int hum = 999;
+char condition = "na";
 
 //----0-9 PIXEL ART NUMS----
 int num0[] = {12, 13, 14, 22, 30, 38, 46, 54, 53, 52, 44, 36, 28, 20};
@@ -118,28 +118,43 @@ void loop() {
   pixels.show();
 }
 
+void DisplayCondition(){
+  if(condition == "na"){
+    DisplayNoData()
+  }
+}
+
+void DisplayHumidity(){
+  if(hum == "999"){
+    DisplayNoData()
+  }
+}
+
 void displayScreen(int screen) {
   ClearDisplay();
   // Display the content based on the current screen
   switch (screen) {
     case 0:
-      // Display temperature
+      // Display Conditions
       pixels.setPixelColor(7, 0, 25, 25);
       pixels.setPixelColor(6, 0, 25, 25);
-      DisplayNumber(temp, 25);
+      DisplayCondition();
       break;
     case 1:
-      // Display humidity
+      // Display temperature
       pixels.setPixelColor(5, 25, 25, 0);
       pixels.setPixelColor(4, 25, 25, 0);
+      DisplayNumber(temp, 25);
       break;
     case 2:
-      // Display weather condition
+      // Display humidity
       pixels.setPixelColor(3, 25, 0, 25);
       pixels.setPixelColor(2, 25, 0, 25);
+      DisplayHumidity();
       break;
     case 3:
       // Display other data
+      DisplayNoData();
       pixels.setPixelColor(1, 25, 0, 0);
       pixels.setPixelColor(0, 25, 0, 0);
       break;
