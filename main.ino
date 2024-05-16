@@ -80,6 +80,8 @@ int thunderADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
 int thunderADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
 int thunderADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0};
 
+int* numbers[] = {num0, num1, num2, num3, num4, num5, num6, num7, num8, num9};
+
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {  
@@ -219,64 +221,13 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
     }
     //Serial.print(n);
     //Draw numbers
-    if (n == 0){
-      for (int i = 0; i < sizeof(num0) / sizeof(num0[0]); i++) {
-        int numberOfLef = num0[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 1){
-      for (int i = 0; i < sizeof(num1) / sizeof(num1[0]); i++) {
-        int numberOfLef = num1[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 2){
-      for (int i = 0; i < sizeof(num2) / sizeof(num2[0]); i++) {
-        int numberOfLef = num2[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 3){
-      for (int i = 0; i < sizeof(num3) / sizeof(num3[0]); i++) {
-        int numberOfLef = num3[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 4){
-      for (int i = 0; i < sizeof(num4) / sizeof(num4[0]); i++) {
-        int numberOfLef = num4[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 5){
-      for (int i = 0; i < sizeof(num5) / sizeof(num5[0]); i++) {
-        int numberOfLef = num5[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 6){
-      for (int i = 0; i < sizeof(num6) / sizeof(num6[0]); i++) {
-        int numberOfLef = num6[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 7){
-      for (int i = 0; i < sizeof(num7) / sizeof(num7[0]); i++) {
-        int numberOfLef = num7[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 8){
-      for (int i = 0; i < sizeof(num8) / sizeof(num8[0]); i++) {
-        int numberOfLef = num8[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
-      }
-    }
-    if (n == 9){
-      for (int i = 0; i < sizeof(num9) / sizeof(num9[0]); i++) {
-        int numberOfLef = num9[i];
-        pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
+    if (n >= 0 && n <= 9) {  // Check to ensure n is within the valid range
+      int* selectedNumber = numbers[n];
+      int size = sizeof(selectedNumber) / sizeof(selectedNumber[0]);
+
+      for (int a = 0; a < size; a++) {
+        int numberOfLef = selectedNumber[a];
+        pixels.setPixelColor(numberOfLef + m, intensity, intensity, intensity);
       }
     }
   }
