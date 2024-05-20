@@ -56,25 +56,25 @@ int num8[] = {12, 20, 29, 28, 36, 44, 52, 53, 54, 13, 14, 22, 30, 38, 46};
 int num9[] = {12, 20, 28, 29, 30, 38, 36, 46, 44, 52, 53, 54};
 
 //----PIXEL ART CONDITIONS----
-//SUN
+//SUN (01d)
 int sunPos[] = {0,7,9,14,20,19,29,28,27,26,37,36,35,34,44,43,54,49,63,56};
 int sunR[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
 int sunG[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
 int sunB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-//CLOUD
+//CLOUD(03d,04d)
 int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 43, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40};
 int cloudR[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
 int cloudG[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
 int cloudB[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
 
-//Rain Aditive
+//Rain Aditive (09d,010d)
 int rainADDPos[] = {0, 2, 4, 6, 17, 19, 21, 23};
 int rainADDR[] = {0, 0, 0, 0, 0, 0, 0, 0};
 int rainADDG[] = {0, 0, 0, 0, 0, 0, 0, 0};
 int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25};
 
-//thunder Aditive
+//thunder Aditive (11d)
 int thunderADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4};
 int thunderADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
 int thunderADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
@@ -107,6 +107,9 @@ void loop() {
     previousWeatherUpdateTime = currentMilis;
     temp = round(getWeather(1));
     temp = round(temp);
+
+    hum = round(getWeather(2));
+    hum = round(hum);
   }
 
   wifiStatusPixel();
@@ -129,6 +132,8 @@ void DisplayCondition(){
 void DisplayHumidity(){
   if(hum == 0){
     DisplayNoData();
+  }else{
+    DisplayNumber(hum, 25);
   }
 }
 
@@ -176,6 +181,8 @@ float getWeather(int dataType){
     return 0;
   }if (dataType == 1){
     return forecast->temp[0];
+  }if (dataType == 2){
+    return forecast->humidity[];
   }
   
   delete forecast;
