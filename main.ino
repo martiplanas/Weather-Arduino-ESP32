@@ -110,14 +110,20 @@ void loop() {
 
     hum = round(getWeather(2));
     hum = round(hum);
+    Serial.print(hum);
   }
 
   wifiStatusPixel();
   while (temp == 0){
     temp = round(getWeather(1));
     temp = round(temp);
+
+    hum = round(getWeather(2));
+    hum = round(hum);
+    Serial.print(hum);
+
     DisplayNoData();
-    delay(5000);
+    delay(2000);
   }
  
   pixels.show();
@@ -182,7 +188,7 @@ float getWeather(int dataType){
   }if (dataType == 1){
     return forecast->temp[0];
   }if (dataType == 2){
-    return forecast->humidity[];
+    return forecast->humidity[0];
   }
   
   delete forecast;
