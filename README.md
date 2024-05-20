@@ -13,3 +13,13 @@
     - Video funcionament (no cal tutorial)
     - Codi pujar .ino + copy paste document
     - Explicar com ho hem fet
+
+## Condition map
+| Name | ConditionVar | openWeather icon
+|
+|------|--------------|-----------------|
+|Sun|0|01d|
+|Sun&Colud|1|02d|
+|Cloudy|2|03d,04d|
+|Rain|3|09d,10d|
+|Thunderstorm|4|11d|
