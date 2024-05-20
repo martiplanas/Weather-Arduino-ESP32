@@ -279,8 +279,9 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
       for (int i = 0; i < sizeof(num9) / sizeof(num9[0]); i++) {
         int numberOfLef = num9[i];
         pixels.setPixelColor(numberOfLef+m, intensity, intensity, intensity);
+      }
+    }
   }
-
 }
 
 void ConnectWifi(){
