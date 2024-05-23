@@ -5,8 +5,7 @@
 - [X] Multi page rewrite
 - [ ] Add page 1
 - [X] Add page 2
-- [ ] Add page 3
-- [ ] Add page 4
+- [X] Add page 3
 
 ### 28 Maig Entrega Projecte
     - Enseñar al resta com funciona el programa
@@ -17,8 +16,9 @@
 ## Condition map
 | Name          | ConditionVar | openWeather icon |
 |---------------|--------------|------------------|
-| Sun           | 0            | 01d              |
-| Sun & Cloud   | 1            | 02d              |
-| Cloudy        | 2            | 03d, 04d         |
-| Rain          | 3            | 09d, 10d         |
-| Thunderstorm  | 4            | 11d              |
+| Sun           | 1            | 01d              |
+| Sun & Cloud   | 2            | 02d              |
+| Cloudy        | 3            | 03d, 04d         |
+| Rain          | 4            | 09d, 10d         |
+| Thunderstorm  | 5            | 11d              |
+| Unknown       | 0            | else             |

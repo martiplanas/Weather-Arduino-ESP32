@@ -15,8 +15,8 @@
 #define NUMPIXELS      64
 
 //----------WIFI----------
-const char* ssid = "MIWIFI_CDc7";
-const char* password = "jFbRaHZX";
+const char* ssid = "test";
+const char* password = "arduinoy";
 bool wifiStatus = false;
 
 //-------OPEN WEATHER-----
@@ -110,7 +110,8 @@ void loop() {
 
     hum = round(getWeather(2));
     hum = round(hum);
-    Serial.print(hum);
+
+    condition = getWeather(0);
   }
 
   wifiStatusPixel();
@@ -122,6 +123,8 @@ void loop() {
     hum = round(hum);
     Serial.print(hum);
 
+    condition = getWeather(0);
+
     DisplayNoData();
     delay(2000);
   }
@@ -132,6 +135,20 @@ void loop() {
 void DisplayCondition(){
   if(condition == 0){
     DisplayNoData();
+  }
+  condition = 1;
+  if(condition == 1){
+    for (int i = 0; i < sizeof(sunPos) / sizeof(sunPos[0]); i++) {
+      pixels.setPixelColor(sunPos[i], sunR[i], sunG[i], sunB[i]);
+    }
+  }else if(condition == 2){
+
+  }else if(condition == 3){
+
+  }else if(condition == 4){
+
+  }else if(condition == 5){
+
   }
 }
 
@@ -174,24 +191,44 @@ void displayScreen(int screen) {
   }
 }
 
-float getWeather(int dataType){
+float getWeather(int dataType) {
   pixels.setPixelColor(57, 25, 25, 0);
-  OW_forecast  *forecast = new OW_forecast;
+  OW_forecast *forecast = new OW_forecast;
 
   Serial.print("\nRequesting weather information from OpenWeather... ");
 
-  ow.getForecast(forecast, api_key, latitude, longitude, units, language);
+  bool success = ow.getForecast(forecast, api_key, latitude, longitude, units, language);
   pixels.setPixelColor(57, 0, 0, 0);
 
-  if (dataType == 0){
-    return 0;
-  }if (dataType == 1){
-    return forecast->temp[0];
-  }if (dataType == 2){
-    return forecast->humidity[0];
+  float result = 0; // Default result in case of failure
+
+  if (success) {
+    if (dataType == 0) {
+      String icon = forecast->icon[0];
+      Serial.print(icon);
+
+      if (icon == "01d") {
+        result = 1;
+      } else if (icon == "02d") {
+        result = 2;
+      } else if (icon == "03d" || icon == "04d") {
+        result = 3;
+      } else if (icon == "09d" || icon == "10d") {
+        result = 4;
+      } else if (icon == "11d") {
+        result = 5;
+      } else {
+        result = 0;
+      }
+    } else if (dataType == 1) {
+      result = forecast->temp[0];
+    } else if (dataType == 2) {
+      result = forecast->humidity[0];
+    }
   }
-  
+
   delete forecast;
+  return result;
 }
 
 void wifiStatusPixel(){
@@ -214,9 +251,6 @@ void DisplayNumber(int num, int intensity){//ONLY 0 to 99
   } else {
     d1 = num / 10; 
     d2 = num % 10; 
-
-    //Serial.print(d1);
-    //Serial.print(d2);
   }
 
 
