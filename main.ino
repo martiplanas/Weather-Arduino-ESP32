@@ -36,7 +36,7 @@ unsigned long previousWeatherUpdateTime = 0;
 
 //----SCREEN PAGE STATE----
 int currentScreen = 0;
-int totalScreens = 4;
+int totalScreens = 3;
 
 //----LOCAL WEATHER VAR----
 int temp = 0; 
@@ -63,22 +63,22 @@ int sunG[] = {25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25
 int sunB[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 //CLOUD(03d,04d)
-int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 43, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40};
+int cloudPos[]={39, 30, 29, 28, 27, 26, 25, 38, 37, 36, 35, 34, 33, 32, 47, 46, 45, 44, 43, 42, 54, 53, 52, 51, 61, 60, 59, 50, 41, 40};
 int cloudR[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
 int cloudG[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
-int cloudB[] = {15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25};
+int cloudB[] = {10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 35, 35, 35, 35, 35};
 
 //Rain Aditive (09d,010d)
-int rainADDPos[] = {0, 2, 4, 6, 17, 19, 21, 23};
+int rainADDPos[] = {8, 10, 12, 14, 17, 19, 21, 23};
 int rainADDR[] = {0, 0, 0, 0, 0, 0, 0, 0};
 int rainADDG[] = {0, 0, 0, 0, 0, 0, 0, 0};
 int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25};
 
 //thunder Aditive (11d)
-int thunderADDPos[] = {0, 2, 6, 17, 19, 23, 21, 13, 12, 4};
-int thunderADDR[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
-int thunderADDG[] = {0, 0, 0, 0, 0, 0, 25, 25, 25, 25};
-int thunderADDB[] = {25, 25, 25, 25, 25, 25, 0, 0, 0, 0};
+int thunderADDPos[] = {2, 8, 10, 11, 12, 14, 17, 19, 21, 23};
+int thunderADDR[] = {25, 0, 25, 25, 0, 0, 0, 25, 0, 0};
+int thunderADDG[] = {25, 0, 25, 25, 0, 0, 0, 25, 0, 0};
+int thunderADDB[] = {0, 25, 0, 0, 25, 25, 25, 0, 25, 25};
 
 int* numbers[] = {num0, num1, num2, num3, num4, num5, num6, num7, num8, num9};
 
@@ -133,22 +133,35 @@ void loop() {
 }
 
 void DisplayCondition(){
+  condition = 4;
   if(condition == 0){
     DisplayNoData();
-  }
-  condition = 1;
-  if(condition == 1){
+  }else if(condition == 1){
     for (int i = 0; i < sizeof(sunPos) / sizeof(sunPos[0]); i++) {
       pixels.setPixelColor(sunPos[i], sunR[i], sunG[i], sunB[i]);
     }
   }else if(condition == 2){
-
+    for (int i = 0; i < sizeof(cloudPos) / sizeof(cloudPos[0]); i++) {
+      pixels.setPixelColor(cloudPos[i], cloudR[i], cloudG[i], cloudB[i]);
+    }
   }else if(condition == 3){
-
+    for (int i = 0; i < sizeof(cloudPos) / sizeof(cloudPos[0]); i++) {
+      pixels.setPixelColor(cloudPos[i], cloudR[i], cloudG[i], cloudB[i]);
+    }
   }else if(condition == 4){
-
+    for (int i = 0; i < sizeof(cloudPos) / sizeof(cloudPos[0]); i++) {
+      pixels.setPixelColor(cloudPos[i], cloudR[i], cloudG[i], cloudB[i]);
+    }
+    for (int i = 0; i < sizeof(rainADDPos) / sizeof(rainADDPos[0]); i++) {
+      pixels.setPixelColor(rainADDPos[i], rainADDR[i], rainADDG[i], rainADDB[i]);
+    }
   }else if(condition == 5){
-
+    for (int i = 0; i < sizeof(cloudPos) / sizeof(cloudPos[0]); i++) {
+      pixels.setPixelColor(cloudPos[i], cloudR[i], cloudG[i], cloudB[i]);
+    }
+    for (int i = 0; i < sizeof(thunderADDPos) / sizeof(thunderADDPos[0]); i++) {
+      pixels.setPixelColor(thunderADDPos[i], thunderADDR[i], thunderADDG[i], thunderADDB[i]);
+    }
   }
 }
 
@@ -167,26 +180,22 @@ void displayScreen(int screen) {
     case 0:
       // Display Conditions
       DisplayCondition();
-      pixels.setPixelColor(7, 0, 25, 25);
-      pixels.setPixelColor(6, 0, 25, 25);
+      pixels.setPixelColor(7, 0, 2, 25);
+      pixels.setPixelColor(6, 0, 2, 25);
+      pixels.setPixelColor(5, 0, 2, 25);
+      pixels.setPixelColor(4, 0, 2, 25);
       break;
     case 1:
       // Display temperature
       DisplayNumber(temp, 25);
-      pixels.setPixelColor(5, 25, 25, 0);
-      pixels.setPixelColor(4, 25, 25, 0);
+      pixels.setPixelColor(3, 25, 25, 0);
+      pixels.setPixelColor(2, 25, 25, 0);
       break;
     case 2:
       // Display humidity
       DisplayHumidity();
-      pixels.setPixelColor(3, 25, 0, 25);
-      pixels.setPixelColor(2, 25, 0, 25);
-      break;
-    case 3:
-      // Display other data
-      DisplayNoData();
-      pixels.setPixelColor(1, 25, 0, 0);
-      pixels.setPixelColor(0, 25, 0, 0);
+      pixels.setPixelColor(1, 25, 0, 25);
+      pixels.setPixelColor(0, 25, 0, 25);
       break;
   }
 }
@@ -344,7 +353,7 @@ void ConnectWifi(){
 }
 
 void ClearDisplay(){
-  for(int i = 0; i < 63; i++){ 
+  for(int i = 0; i < 64; i++){ 
     pixels.setPixelColor(i, 0, 0, 0);
   }
 }
