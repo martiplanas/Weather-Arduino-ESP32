@@ -9,20 +9,20 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-// Definim el pin de l'Arduino que utilitzarem per controlar el led o la matriu de leds
+//pin de l'Arduino de la matriu de leds
 #define PIN            25
 // Numero de leds connectats
 #define NUMPIXELS      64
 
 //----------WIFI----------
-const char* ssid = "test";
-const char* password = "arduinoy";
+const char* ssid = ""; //------------------------------------------TYPE WIFI SSID-------------------------
+const char* password = ""; //--------------------------------------TYPE WIFI PASSWORD---------------------
 bool wifiStatus = false;
 
 //-------OPEN WEATHER-----
-String api_key = "9a77e9742b30c25a5d4745718be35c17"; 
-String latitude =  "42.9831"; 
-String longitude = "2.8249";
+String api_key = "9a77e9742b30c25a5d4745718be35c17"; //------------TYPE API KEY--------------------------
+String latitude =  "42.9831"; //Latitud ubi
+String longitude = "2.8249"; //Longitud ubi
 String units = "metric"; 
 String language = "en"; 
 OW_Weather ow;
@@ -31,7 +31,7 @@ OW_Weather ow;
 const unsigned long screenInterval = 5000; //5s between pages
 unsigned long previousScreenTime = 0;
 
-const unsigned long weatherUpdateInterval = 300000; //5min between update weather
+const unsigned long weatherUpdateInterval = 300000; //5min between weather updates
 unsigned long previousWeatherUpdateTime = 0;
 
 //----SCREEN PAGE STATE----
@@ -76,9 +76,15 @@ int rainADDB[] = {25, 25, 25, 25, 25, 25, 25, 25};
 
 //thunder Aditive (11d)
 int thunderADDPos[] = {2, 8, 10, 11, 12, 14, 17, 19, 21, 23};
-int thunderADDR[] = {25, 0, 25, 25, 0, 0, 0, 25, 0, 0};
-int thunderADDG[] = {25, 0, 25, 25, 0, 0, 0, 25, 0, 0};
+int thunderADDR[] = {25, 0, 25, 0, 0, 0, 0, 25, 0, 0};
+int thunderADDG[] = {25, 0, 25, 0, 0, 0, 0, 25, 0, 0};
 int thunderADDB[] = {0, 25, 0, 0, 25, 25, 25, 0, 25, 25};
+
+//Sun Additive (02d)
+int sunADDPos[]={33, 41, 42, 50, 51};
+int sunADDR[] = {25, 25, 25, 25, 25};
+int sunADDG[] = {25, 25, 25, 25, 25};
+int sunADDB[] = {0, 0, 0, 0, 0};
 
 int* numbers[] = {num0, num1, num2, num3, num4, num5, num6, num7, num8, num9};
 
@@ -133,7 +139,6 @@ void loop() {
 }
 
 void DisplayCondition(){
-  condition = 4;
   if(condition == 0){
     DisplayNoData();
   }else if(condition == 1){
@@ -142,7 +147,10 @@ void DisplayCondition(){
     }
   }else if(condition == 2){
     for (int i = 0; i < sizeof(cloudPos) / sizeof(cloudPos[0]); i++) {
-      pixels.setPixelColor(cloudPos[i], cloudR[i], cloudG[i], cloudB[i]);
+      pixels.setPixelColor(cloudPos[i]-16, cloudR[i], cloudG[i], cloudB[i]);
+    }
+    for (int i = 0; i < sizeof(sunADDPos) / sizeof(sunADDPos[0]); i++) {
+      pixels.setPixelColor(sunADDPos[i], sunADDR[i], sunADDG[i], sunADDB[i]);
     }
   }else if(condition == 3){
     for (int i = 0; i < sizeof(cloudPos) / sizeof(cloudPos[0]); i++) {
@@ -169,7 +177,7 @@ void DisplayHumidity(){
   if(hum == 0){
     DisplayNoData();
   }else{
-    DisplayNumber(hum, 25);
+    DisplayNumber(hum, 15);
   }
 }
 
@@ -180,22 +188,38 @@ void displayScreen(int screen) {
     case 0:
       // Display Conditions
       DisplayCondition();
-      pixels.setPixelColor(7, 0, 2, 25);
-      pixels.setPixelColor(6, 0, 2, 25);
-      pixels.setPixelColor(5, 0, 2, 25);
-      pixels.setPixelColor(4, 0, 2, 25);
+      pixels.setPixelColor(7, 0, 5, 50);
+      pixels.setPixelColor(6, 0, 5, 50);
+      pixels.setPixelColor(5, 0, 5, 50);
+      pixels.setPixelColor(4, 0, 5, 50);
+      pixels.setPixelColor(3, 5, 5, 0);
+      pixels.setPixelColor(2, 5, 5, 0);
+      pixels.setPixelColor(1, 5, 0, 5);
+      pixels.setPixelColor(0, 5, 0, 5);
       break;
     case 1:
       // Display temperature
-      DisplayNumber(temp, 25);
-      pixels.setPixelColor(3, 25, 25, 0);
-      pixels.setPixelColor(2, 25, 25, 0);
+      DisplayNumber(temp, 15);
+      pixels.setPixelColor(7, 0, 0, 1);
+      pixels.setPixelColor(6, 0, 0, 1);
+      pixels.setPixelColor(5, 0, 0, 1);
+      pixels.setPixelColor(4, 0, 0, 1);
+      pixels.setPixelColor(3, 30, 30, 0);
+      pixels.setPixelColor(2, 30, 30, 0);
+      pixels.setPixelColor(1, 1, 0, 1);
+      pixels.setPixelColor(0, 1, 0, 1);
       break;
     case 2:
       // Display humidity
       DisplayHumidity();
-      pixels.setPixelColor(1, 25, 0, 25);
-      pixels.setPixelColor(0, 25, 0, 25);
+      pixels.setPixelColor(7, 0, 0, 1);
+      pixels.setPixelColor(6, 0, 0, 1);
+      pixels.setPixelColor(5, 0, 0, 1);
+      pixels.setPixelColor(4, 0, 0, 1);
+      pixels.setPixelColor(3, 1, 1, 0);
+      pixels.setPixelColor(2, 1, 1, 0);
+      pixels.setPixelColor(1, 30, 0, 30);
+      pixels.setPixelColor(0, 30, 0, 30);
       break;
   }
 }
