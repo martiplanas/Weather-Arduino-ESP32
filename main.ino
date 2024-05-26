@@ -20,9 +20,9 @@ const char* password = ""; //--------------------------------------TYPE WIFI PAS
 bool wifiStatus = false;
 
 //-------OPEN WEATHER-----
-String api_key = "9a77e9742b30c25a5d4745718be35c17"; //------------TYPE API KEY--------------------------
-String latitude =  "42.9831"; //Latitud ubi
-String longitude = "2.8249"; //Longitud ubi
+String api_key = ""; //---------------------TYPE API KEY--------------------------
+String latitude =  ""; //-------------------TYPE UBI Latitude--------------------------
+String longitude = ""; //-------------------TYPE UBI Longitude--------------------------
 String units = "metric"; 
 String language = "en"; 
 OW_Weather ow;
